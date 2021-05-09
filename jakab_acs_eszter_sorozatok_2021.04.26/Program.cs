@@ -20,7 +20,7 @@ namespace jakab_acs_eszter_sorozatok_2021._04._26
         static void Main(string[] args)
         {
             Adat[] adatok = new Adat[400];
-            StreamReader olvas = new StreamReader(@"C:\Users\Rendszergazda\Desktop\J_Eszter_prog_feladat\2020-oktober\lista.txt");
+            StreamReader olvas = new StreamReader(@"E:\OneDrive - Kisvárdai SZC Móricz Zsigmond Szakgimnáziuma és Szakközépiskolája\Oktatas\Programozas\Jakab_Acs_Eszter\Erettsegi_feladatok\2020-oktober\lista.txt");
             int n = 0;
             while (!olvas.EndOfStream)
             {
@@ -70,8 +70,74 @@ namespace jakab_acs_eszter_sorozatok_2021._04._26
                     osszes += adatok[i].hossz;
                 }
             }
+            int nap = osszes / 1440;
+            int maradek = osszes % 1440;
+            int ora = maradek / 60;
+            int perc = maradek % 60;
+            Console.WriteLine("4.feladat");
+            Console.WriteLine($"Sorozatnézéssel {nap} napot {ora} órát és {perc} percet töltött.");
+            //Console.WriteLine(nap+" "+maradek+" "+ora+" "+perc);
 
+            //5.feladat
+            //Console.Write("Adjon meg egy dátumot! Dátum= ");
+            //string datum = Console.ReadLine();
+
+
+            //7.feladat
+            Console.WriteLine("7.feladat");
+            Console.Write("Adja meg a hét egy napját (például cs)! Nap= ");
+            string rnap = Console.ReadLine();
+            bool volt = false;
+            int hany = 0;
+            string cim1 = null, cim2 = null;
+            for (int i = 0;i<n;i++)
+            {
+                if (adatok[i].datum != "NI")
+                {
+                    string[] darab = adatok[i].datum.Split('.');
+                    int ev = int.Parse(darab[0]);
+                    int ho = int.Parse(darab[1]);
+                    nap = int.Parse(darab[2]);
+                    if (hetnapja(ev,ho,nap) == rnap)
+                    {
+                        volt = true;
+                        hany++;
+                        if (hany == 1)
+                        {
+                            cim1 = adatok[i].cim;
+                        }          
+                                                                    
+                        if (hany == 2)
+                        {                           
+                            if (cim1 != cim2)
+                            {
+                                Console.WriteLine(cim1);
+                            }
+                            cim2 = cim1;
+                            hany = 0;
+                        }                      
+                    }
+                }              
+            }
+            if (!volt)
+            {
+                Console.WriteLine("Az adott napon nem kerül adásba sorozat.");
+            }
+            
             Console.ReadKey();
         }
+
+        //6.feladat
+        static string hetnapja (int ev, int ho, int nap)
+        {
+            string[] napok = { "v", "h", "k", "sze", "cs", "p", "szo" };
+            int[] honapok = {0,3,2,5,0,3,5,1,4,6,2,4};
+            if (ho<3)
+            {
+                ev = ev - 1;
+            }
+            return napok[(ev+ev/4-ev/100+ev/400+honapok[ho-1] +nap) % 7];
+        }
+        
     }
 }
